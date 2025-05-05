@@ -1,5 +1,6 @@
 import os
 import streamlit as st
+import streamlit.components.v1 as components
 import uuid
 from agents.agri_agent import get_agri_agent
 from utils.ocr_utils import extract_texts_from_pdf
