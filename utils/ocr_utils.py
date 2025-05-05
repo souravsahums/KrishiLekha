@@ -9,12 +9,14 @@ def extract_images_from_pdf(file_bytes):
     return images
 
 def extract_texts_from_pdf(pdf_bytes):
+    dir_name = os.path.dirname(__file__)
+    UPLOAD_FOLDER = os.path.join(dir_name, "temp_images")
+    
     try:
         reader = easyocr.Reader(['en', 'hi'], gpu=False)
         images = extract_images_from_pdf(pdf_bytes)
         all_text = []
 
-        UPLOAD_FOLDER = "temp_images"
         os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
         for i, img in enumerate(images):
@@ -30,6 +32,7 @@ def extract_texts_from_pdf(pdf_bytes):
         return all_text
     finally:
         # Clean up temporary images
-        for img in os.listdir(UPLOAD_FOLDER):
-            os.remove(os.path.join(UPLOAD_FOLDER, img))
-        os.rmdir(UPLOAD_FOLDER)
+        if os.path.exists(UPLOAD_FOLDER):
+            for img in os.listdir(UPLOAD_FOLDER):
+                os.remove(os.path.join(UPLOAD_FOLDER, img))
+            os.rmdir(UPLOAD_FOLDER)
