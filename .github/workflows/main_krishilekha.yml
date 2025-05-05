@@ -34,7 +34,7 @@ jobs:
             wget \
             unzip \
             libx11-dev \
-            libgl1-mesa-glx \
+            libgl1 \
             poppler-utils
 
       - name: Create and activate virtual environment
