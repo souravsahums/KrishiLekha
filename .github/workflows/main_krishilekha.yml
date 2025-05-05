@@ -35,7 +35,30 @@ jobs:
             unzip \
             libx11-dev \
             libgl1 \
-            poppler-utils
+            poppler-utils \
+            libreadline-dev \
+            libssl-dev \
+            zlib1g-dev \
+            libffi-dev \
+            libbz2-dev \
+            liblzma-dev \
+            libsqlite3-dev
+
+      - name: Install latest SQLite (>=3.35.0)
+        run: |
+          wget https://www.sqlite.org/2023/sqlite-autoconf-3420000.tar.gz
+          tar xzf sqlite-autoconf-3420000.tar.gz
+          cd sqlite-autoconf-3420000
+          ./configure --prefix=/usr/local
+          make -j$(nproc)
+          sudo make install
+          cd ..
+          echo "/usr/local/lib" | sudo tee -a /etc/ld.so.conf.d/sqlite3.conf
+          sudo ldconfig
+
+      - name: Verify SQLite version
+        run: |
+          /usr/local/bin/sqlite3 --version
 
       - name: Create and activate virtual environment
         run: |
@@ -44,6 +67,8 @@ jobs:
           pip install --upgrade pip
 
       - name: Install Python dependencies
+        env:
+          LD_LIBRARY_PATH: /usr/local/lib
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
