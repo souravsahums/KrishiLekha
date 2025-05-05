@@ -1,18 +1,24 @@
-from langchain_community.llms.llamacpp import LlamaCpp as Llama
 import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+
+from langchain_openai import AzureChatOpenAI
+
+openai_api_base = os.getenv("AZURE_OPENAI_API_BASE")
+openai_api_version = os.getenv("AZURE_OPENAI_API_VERSION")
+openai_api_key = os.getenv("AZURE_OPENAI_API_KEY")
+openai_model_name = os.getenv("AZURE_OPENAI_MODEL_NAME", "gpt-35-turbo")
+openai_deployment_name = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-35-turbo")
+
 
 def load_llm():
-    parent_dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    model_path = os.path.join(parent_dir_name, "models", "mistral-7b-v0.1.Q4_K_M.gguf")
-
-    if not os.path.exists(model_path):
-        raise FileNotFoundError(f"Model file not found at {model_path}. Please download the model first.")
-    
-    return Llama(
-        model_path=model_path,
-        n_ctx=2048,
-        n_threads=2,  # Adjust based on your CPU cores
+    return AzureChatOpenAI(
+        azure_endpoint=openai_api_base,
+        api_key=openai_api_key,
+        deployment_name=openai_deployment_name,
+        openai_api_version=openai_api_version,
         temperature=0.4,
         max_tokens=1024,
-        verbose=True
     )
+    

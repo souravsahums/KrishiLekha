@@ -9,21 +9,27 @@ def extract_images_from_pdf(file_bytes):
     return images
 
 def extract_texts_from_pdf(pdf_bytes):
-    reader = easyocr.Reader(['en', 'hi'], gpu=False)
-    images = extract_images_from_pdf(pdf_bytes)
-    all_text = []
+    try:
+        reader = easyocr.Reader(['en', 'hi'], gpu=False)
+        images = extract_images_from_pdf(pdf_bytes)
+        all_text = []
 
-    UPLOAD_FOLDER = "temp_images"
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        UPLOAD_FOLDER = "temp_images"
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-    for i, img in enumerate(images):
-        img_path = os.path.join(UPLOAD_FOLDER, f"page_{i}.jpg")
-        img.save(img_path)
+        for i, img in enumerate(images):
+            img_path = os.path.join(UPLOAD_FOLDER, f"page_{i}.jpg")
+            img.save(img_path)
 
-        st.image(img_path, caption=f"Page {i + 1}", use_column_width=True)
-        with st.spinner(f"🔍 OCR on Page {i + 1}..."):
-            result = reader.readtext(img_path, detail=0)
-            devanagari_texts = [text for text in result if any('\u0900' <= c <= '\u097F' for c in text)]
-            all_text.extend(devanagari_texts)
+            st.image(img_path, caption=f"Page {i + 1}", use_column_width=True)
+            with st.spinner(f"🔍 OCR on Page {i + 1}..."):
+                result = reader.readtext(img_path, detail=0)
+                devanagari_texts = [text for text in result if any('\u0900' <= c <= '\u097F' for c in text)]
+                all_text.extend(devanagari_texts)
 
-    return all_text
+        return all_text
+    finally:
+        # Clean up temporary images
+        for img in os.listdir(UPLOAD_FOLDER):
+            os.remove(os.path.join(UPLOAD_FOLDER, img))
+        os.rmdir(UPLOAD_FOLDER)

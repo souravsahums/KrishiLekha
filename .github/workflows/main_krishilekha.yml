@@ -44,22 +44,6 @@ jobs:
             liblzma-dev \
             libsqlite3-dev
 
-      - name: Install latest SQLite (>=3.35.0)
-        run: |
-          wget https://www.sqlite.org/2023/sqlite-autoconf-3420000.tar.gz
-          tar xzf sqlite-autoconf-3420000.tar.gz
-          cd sqlite-autoconf-3420000
-          ./configure --prefix=/usr/local
-          make -j$(nproc)
-          sudo make install
-          cd ..
-          echo "/usr/local/lib" | sudo tee -a /etc/ld.so.conf.d/sqlite3.conf
-          sudo ldconfig
-
-      - name: Verify SQLite version
-        run: |
-          /usr/local/bin/sqlite3 --version
-
       - name: Create and activate virtual environment
         run: |
           python -m venv venv
