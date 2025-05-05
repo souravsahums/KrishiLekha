@@ -1,4 +1,8 @@
 import os
+
+from misc.download_models import download_model
+download_model()
+
 import streamlit as st
 import uuid
 from agents.agri_agent import get_agri_agent
