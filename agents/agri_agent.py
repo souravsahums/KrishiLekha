@@ -33,7 +33,7 @@ def get_agri_agent():
         llm=llm,
         agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
         verbose=True,
-        handle_parsing_errors=False,
+        handle_parsing_errors=True,
     )
     
     # Define the agent
