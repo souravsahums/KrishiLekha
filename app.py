@@ -1,5 +1,4 @@
 import os
-
 import streamlit as st
 import uuid
 from agents.agri_agent import get_agri_agent
@@ -10,7 +9,22 @@ from utils.voice_transcriber_util import transcribe_audio
 from streamlit_mic_recorder import mic_recorder
 from langchain.schema import HumanMessage, AIMessage
 
-st.set_page_config(layout="wide")
+# Set Streamlit page config
+st.set_page_config(
+    page_title="KrishiLekha",
+    page_icon="🌾",
+    layout="wide"
+)
+
+# Inject custom HTML (optional) to further control the tab
+components.html(
+    """
+    <script>
+        document.title = "🌾 KrishiLekha";
+    </script>
+    """,
+    height=0,
+)
 st.title("🌾 KrishiLekha")
 
 # Generate or retrieve session ID
