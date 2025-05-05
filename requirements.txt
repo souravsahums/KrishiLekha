@@ -1,0 +1,15 @@
+streamlit==1.35.0
+pdf2image==1.17.0
+easyocr==1.7.2
+faiss-cpu==1.11.0
+sentence-transformers==2.6.1
+chromadb==1.0.7
+langchain==0.3.25
+langchain-core==0.3.58
+langchain-community==0.3.23
+llama-cpp-python==0.3.8
+beautifulsoup4==4.13.4
+playwright==1.52.0
+requests==2.32.3
+torchaudio==2.7.0
+soundfile==0.13.1
